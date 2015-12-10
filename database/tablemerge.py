@@ -12,11 +12,11 @@ import time
 import dbconfig
 
 def InsertItem(tablename, data):    
-    if ChkExistRow(tablename, data[3],data[10]):
+    if ChkExistRow(tablename, data[3]):
         return
     query = """INSERT INTO """ + tablename + """(
-               webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mid,mtype,click)
-               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mtype,click)
+               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     dbconn.Insert(query, data)
 
 def InsertItemMany(tablename, datas):
@@ -25,17 +25,17 @@ def InsertItemMany(tablename, datas):
 
 def InsertItems(tablename, datas):
     query = """INSERT INTO """ + tablename + """(
-               webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mid,mtype,click)
-               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+               webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mtype,click)
+               values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     dbconn.insertMany(query, datas)
 
 def InsertItemDict(tablename, data):
-    if ChkExistRow(tablename, data['newsid'],data['source']):
+    if ChkExistRow(tablename, data['newsid']):
         return 1
     query = "INSERT INTO " + tablename + """(
-             webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mid,mtype,click) 
+             webid,url,title,newsid,thumb,summary,keywords,ctime,source,author,description,mtype,click) 
              values(%(webid)s, %(url)s, %(title)s,%(newsid)s, %(thumb)s, %(summary)s, %(keywords)s,%(ctime)s, 
-             %(source)s, %(author)s, %(description)s, %(mid)s, %(mtype)s, %(click)s)"""
+             %(source)s, %(author)s, %(description)s, %(mtype)s, %(click)s)"""
     dbconn.Insert(query, data)
     return 0
 
@@ -58,11 +58,14 @@ def getBriefRecords(tablename,dayago=30):
 def getMaxWebId(tablename,web):
     query='select max(webid) from '+tablename+' where source = %s'
     rows=dbconn.Select(query,(web,))
-    return rows[0][0]
+    if rows!=-1:
+        return rows[0][0]
+    else:
+        return rows
 
 def getTitleBriefRecords(tablename,dayago=30):
     starttime=time.time()-24*3600*dayago
-    query = "SELECT mid,title,ctime,source FROM " + tablename+' where ctime > %s'
+    query = "SELECT newsid,title,ctime,source FROM " + tablename+' where ctime > %s'
     rows = dbconn.Select(query, (starttime,))
     return rows
 
@@ -72,19 +75,19 @@ def getMaxId(tablename):
     return rows[0][0]
 
 def getTitleBriefRecordsBiggerId(tablename,tid):
-    query = "SELECT mid,title,ctime,source FROM " + tablename+' where id > %s'
+    query = "SELECT newsid,title,ctime,source FROM " + tablename+' where id > %s'
     rows = dbconn.Select(query, (tid,))
     return rows
 
-def getRecordsByMid(tablename,mid):
+def getRecordsByNewsid(tablename,newsid):
     # return the user clicked news info,should be only one if no accident
-    query = "SELECT * FROM " + tablename + """ WHERE mid = %s""" 
-    rows = dbconn.Select(query, (mid,))   
+    query = "SELECT * FROM " + tablename + """ WHERE newsid = %s""" 
+    rows = dbconn.Select(query, (newsid,))   
     return rows
 
-def getRecordsById(tablename,tid):
+def getRecordsById(tablename,mtid):
     query = "SELECT * FROM " + tablename+' where id = %s'
-    rows = dbconn.Select(query, (tid,))
+    rows = dbconn.Select(query, (mtid,))
     return rows
 
 def getRecordsByCtime(tablename, starttime, endtime):    
@@ -95,46 +98,46 @@ def getRecordsByCtime(tablename, starttime, endtime):
 def getTopClickRecords(tablename,topnum=10):
 #     @attention: get top @param topnum: records from @param tablename:
 #     order by click,that is,get hottest @param topnum: records  
-    query='select * from '+tablename+' order by click desc,mid desc limit %s'
+    query='select * from '+tablename+' order by click desc,newsid desc limit %s'
     rows=dbconn.Select(query,(topnum,))
     return rows
 
-def getTopECSMRecords(tablename,click,mid,topnum=10):
+def getTopECSNRecords(tablename,click,newsid,topnum=10):
 #     return the topnum records whose click equals @param click: and newsid smaller than @param newsid: 
-    query='select * from '+tablename+' where click = %s and mid < %s order by click desc,mid desc limit %s'
-    rows=dbconn.Select(query,(click,mid,topnum))
+    query='select * from '+tablename+' where click = %s and newsid < %s order by click desc,newsid desc limit %s'
+    rows=dbconn.Select(query,(click,newsid,topnum))
     return rows
 
 def getTopSCRecords(tablename,click,topnum=10):
 #     return the topnum records smaller click  
-    query='select * from '+tablename+' where click < %s order by click desc,mid desc limit %s'
+    query='select * from '+tablename+' where click < %s order by click desc,newsid desc limit %s'
     rows=dbconn.Select(query,(click,topnum))
     return rows
 
 def getTitleByCtime(tablename,startday=30,enday=None):
-    # return [(title,mid),]     
+    # return [(title,newsid),]     
     starttime=time.time()-86400*startday
     endtime=time.time()
     query = "SELECT id,title,source FROM " + tablename + """ WHERE ctime >= %s AND ctime <= %s""" 
     rows = dbconn.Select(query, (starttime,endtime))   
     return rows
 
-def updateMtype(tablename,mtype,mid):
-    query = "UPDATE " + tablename + """ SET mtype = %s WHERE mid = %s """
-    dbconn.Update(query, (mtype,mid))
+def updateMtype(tablename,mtype,newsid):
+    query = "UPDATE " + tablename + """ SET mtype = %s WHERE newsid = %s """
+    dbconn.Update(query, (mtype,newsid))
 
-def increaseClick(tablename,mid):
-    query = 'select click from '+tablename+""" WHERE mid = %s """
-    rows=dbconn.Select(query,(mid,))
+def increaseClick(tablename,newsid):
+    query = 'select click from '+tablename+""" WHERE newsid = %s """
+    rows=dbconn.Select(query,(newsid,))
     if rows !=-1 and len(rows)>0:
         click=rows[0][0]
         click+=1
-        query = "UPDATE " + tablename + """ SET click = %s WHERE mid = %s"""
-        dbconn.Update(query, (click,mid))
+        query = "UPDATE " + tablename + """ SET click = %s WHERE newsid = %s"""
+        dbconn.Update(query, (click,newsid))
         
-def ChkExistRow(tablename, newsid,source):
-    query = "SELECT COUNT(id) FROM " + tablename + " WHERE newsid = %s and source = %s"
-    row = dbconn.Select(query, (newsid,source))[0][0]
+def ChkExistRow(tablename, newsid):
+    query = "SELECT COUNT(id) FROM " + tablename + " WHERE newsid = %s"
+    row = dbconn.Select(query, (newsid,))[0][0]
     if row == 0:
         return False
     return True
@@ -150,22 +153,20 @@ def CreateTable(tablename):
                webid integer,
                url varchar(2048),   
                title varchar(512),           
-               newsid varchar(1024),                              
+               newsid varchar(255),                              
                thumb varchar(2048),
-               summary varchar(10240),
+               summary text,
                keywords varchar(512),  
                ctime bigint, 
                source varchar(255),
                author varchar(255),
-               description varchar(10240),
-               mid varchar(255),
+               description text,
                mtype varchar(255),
                click integer)"""
     dbconn.CreateTable(query, tablename)
-    dbconn.CreateIndex('create index on %s (mid)'%tablename)
     dbconn.CreateIndex('create index on %s (ctime)'%tablename)
-    dbconn.CreateIndex('create index on %s (newsid,source)'%tablename)    
-    dbconn.CreateIndex('create index on %s (click,mid)'%tablename)
+    dbconn.CreateIndex('create index on %s (newsid)'%tablename)    
+    dbconn.CreateIndex('create index on %s (click,newsid)'%tablename)
 
 if __name__ == "__main__":
     CreateTable(dbconfig.mergetable) 

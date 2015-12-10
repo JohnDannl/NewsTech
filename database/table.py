@@ -59,9 +59,9 @@ def getBriefRecordsBiggerId(tablename,tid):
     rows = dbconn.Select(query, (tid,))
     return rows
 
-def getRecordsById(tablename,tid):
+def getRecordsById(tablename,webid):
     query = "SELECT * FROM " + tablename+' where id = %s'
-    rows = dbconn.Select(query, (tid,))
+    rows = dbconn.Select(query, (webid,))
     return rows
 
 def getRecordsByCtime(tablename, starttime, endtime):
@@ -133,18 +133,20 @@ def ChkExistRow(tablename, newsid):
     return True
                 
 def CreateNewsTable(tablename):
+    # for mysql text has a length 2^16 bytes limit,for postgresql text is unlimited
+    # and for postgresql there is no performance effect among char(n),varchar(n),text
     query = """CREATE TABLE """ + tablename + """(
                id serial primary key, 
                url varchar(2048),   
                title varchar(512),           
-               newsid varchar(1024),                              
+               newsid varchar(255),                              
                thumb varchar(2048),
-               summary varchar(10240),
+               summary text,
                keywords varchar(512),  
                ctime bigint,         
                source varchar(255),
                author varchar(255),
-               description varchar(10240))"""
+               description text)"""
     dbconn.CreateTable(query, tablename)
     dbconn.CreateIndex('create index on %s (newsid)'%tablename)
     dbconn.CreateIndex('create index on %s (ctime)'%tablename)
@@ -156,9 +158,9 @@ def ReIndex(tablename):
         print 'Failure:reindex %s'%tablename
     
 if __name__ == "__main__":
-    CreateNewsTable(dbconfig.tableName['huxiu'])
-#     for tablename in dbconfig.tableName.itervalues():
-#         CreateNewsTable(tablename)
+#     CreateNewsTable(dbconfig.tableName['huxiu'])
+    for tablename in dbconfig.tableName.itervalues():
+        CreateNewsTable(tablename)
     
 #     rows=getTopETBVRecords(dbconfig.tableName[2],'2014-09-04 10:09:02','1310457')
 #     if rows !=-1:

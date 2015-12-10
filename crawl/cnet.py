@@ -44,7 +44,7 @@ def getHtmlInfo():
             nInfo['title']=head.find('b').getText()
             nInfo['summary']=head.find('p').getText()
             metas=head.find('p',{'class':'meta'})
-            nInfo['keywords']=' '.join(a.getText() for a in metas.find_all('a')) if metas else ''            
+            nInfo['keywords']=','.join(a.getText() for a in metas.find_all('a')) if metas else ''            
             nInfo['thumb']=item.find('div',{'class':'qu_ims'}).find('img').get('src')
             timeStr= item.find('div',{'class':'qu_times'}).getText()            
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,u'%Y-%m-%d %H:%M:%S'))) 
@@ -63,7 +63,7 @@ def main():
     infoList+=getHtmlInfo()   
     for info in infoList:
         try:
-#             table.InsertItemDict(ctable, info)
+            table.InsertItemDict(ctable, info)
             print timeFormat.getTimeStamp(info['ctime']),info['title']
         except:
             logging.error('encoding not supported:%s'%info['url'])

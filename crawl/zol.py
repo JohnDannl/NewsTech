@@ -56,7 +56,7 @@ def main():
     infoList=getRssInfo()
     for info in infoList:
         try:
-#             table.InsertItemDict(ctable, info)
+            table.InsertItemDict(ctable, info)
             print timeFormat.getTimeStamp(info['ctime']),info['title']
         except:
             logging.error('encoding not supported:%s'%info['url'])

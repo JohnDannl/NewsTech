@@ -12,9 +12,9 @@ sys.path.append(r'../crawl')
 sys.path.append(r'../aggregate')
 sys.path.append(r'../crawl_mpd')
 #from apscheduler.scheduler import Scheduler
-from crawl import able2do,alibuybuy,bianews,bnet,ciweek,cnet,csdn,donews,geekpark,hiapk,\
-    huxiu,ifanr,ittime,leiphone,pingwest,pintu360,qq,sina,sohu,techcrunch,\
-    technews,techweb,tmt,w163,w36kr,zdnet,zhidx,zol
+from crawl import bnet,ciweek,cnet,csdn,donews,geekpark,hiapk,huxiu,ifanr,ittime,\
+    leiphone,pingwest,pintu360,qq,sina,sohu,techcrunch,technews,techweb,tmt,\
+    w163,w36kr,zdnet,zhidx,zol
 from common import timeFormat
 from aggregate import merge,merge2
 import multiprocessing
@@ -45,14 +45,13 @@ import time
 #     techweb,tmt,w163,w36kr,zdnet,zhidx,zol]
 
 webdic={'sina':sina,'sohu':sohu,'w163':w163,'huxiu':huxiu,'ittime':ittime,
-       'bianews':bianews,'w36kr':w36kr,'leiphone':leiphone,'ifanr':ifanr,'zol':zol,
-       'tmt':tmt,'alibuybuy':alibuybuy,'csdn':csdn,'ciweek':ciweek,'geekpark':geekpark,
-       'donews':donews,'zhidx':zhidx,'techweb':techweb,'bnet':bnet,'cnet':cnet,
-       'techcrunch':techcrunch,'technews':technews,'zdnet':zdnet,'pingwest':pingwest,'pintu360':pintu360,
-       'hiapk':hiapk,'able2do':able2do,'qq':qq}
-webs=['able2do','alibuybuy','bianews','bnet','ciweek','cnet','csdn','donews','geekpark','hiapk',\
-    'huxiu','ifanr','ittime','leiphone','pingwest','pintu360','qq','sina','sohu','techcrunch',\
-    'technews','techweb','tmt','w163','w36kr','zdnet','zhidx','zol']
+       'w36kr':w36kr,'leiphone':leiphone,'ifanr':ifanr,'zol':zol,'tmt':tmt,
+       'csdn':csdn,'ciweek':ciweek,'geekpark':geekpark,'donews':donews,'zhidx':zhidx,
+       'techweb':techweb,'bnet':bnet,'cnet':cnet,'techcrunch':techcrunch,'technews':technews,
+       'zdnet':zdnet,'pingwest':pingwest,'pintu360':pintu360,'hiapk':hiapk,'qq':qq}
+webs=['bnet','ciweek','cnet','csdn','donews','geekpark','hiapk','huxiu','ifanr','ittime',\
+      'leiphone','pingwest','pintu360','qq','sina','sohu','techcrunch','technews','techweb','tmt',\
+      'w163','w36kr','zdnet','zhidx','zol']
 
 count=0
 def call_sync():
@@ -72,10 +71,7 @@ def call_async():
     # Just like single-processing,why?
     # if the function is not named main,'()'is needed
     oldtime=time.time()
-    pool=multiprocessing.Pool() # if none will use default :cpu_count() processings 
-    pool.apply_async(able2do.main())
-    pool.apply_async(alibuybuy.main())
-    pool.apply_async(bianews.main())
+    pool=multiprocessing.Pool() # if none will use default :cpu_count() processings     
     pool.apply_async(bnet.main())    
     pool.apply_async(ciweek.main())
     pool.apply_async(cnet.main())    
@@ -84,10 +80,14 @@ def call_async():
     pool.join()
     msg='Total time cost: %s (seconds)' % (time.time()-oldtime,)     
     print msg  
-    
-if __name__=='__main__':
-    while True:
-        call_sync()
+
+def call_crawl():
+    for web in webs:
+        webdic[web].main()
+if __name__=='__main__':    
+    call_crawl()
+#     while True:
+#         call_sync()
 #         call_async()
 #         aggregate.main()
 #         print 'Main thread begins to sleep at time %s' %(timeformat.getTimeStamp(),)

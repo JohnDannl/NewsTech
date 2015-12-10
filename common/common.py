@@ -10,8 +10,12 @@ import cookielib
 from StringIO import StringIO
 import gzip
 import logging,functools
+import socket
 
 __all__=['r1','cost_log','getHtml','getHtmlwithCookie','getHtmlwithSinaCookie','getHtmlwithQQCookie']
+
+TIMEOUT_IN_SECONDS=8
+socket.setdefaulttimeout(TIMEOUT_IN_SECONDS)
 
 def r1(pattern, text):
     m = re.search(pattern, text)
@@ -34,7 +38,7 @@ def getHtml(url):
     r.add_header("Accept-Language","zh-cn,en-us;q=0.7,en;q=0.3")
     r.add_header("User-Agent","Mozilla/5.0 (Windows NT 6.2; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
     try:
-        content=urllib2.urlopen(r, timeout=3).read()
+        content=urllib2.urlopen(r, timeout=TIMEOUT_IN_SECONDS).read()
         time.sleep(0.3)
         return content
     except:

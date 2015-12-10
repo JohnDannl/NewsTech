@@ -74,7 +74,7 @@ def getJsInfo():
                 nInfo['url']=info['url']                
                 nInfo['summary']=info['text']
                 nInfo['thumb']=info['image']
-                nInfo['keywords']=' '.join(tag['name'] for tag in info['tags']) if len(info['tags'])>0 else ''                    
+                nInfo['keywords']=','.join(tag['name'] for tag in info['tags']) if len(info['tags'])>0 else ''                    
                 nInfo['source']=ctable
                 nInfo['ctime']=long(time.mktime(time.strptime(info['time'],u'%Y年%m月%d日%H:%M')))
                 nInfo['author']= info['source']            
@@ -99,7 +99,7 @@ def main():
         infoDict.update(getHtmlInfo(url))
     for info in infoDict.itervalues():
         try:
-#             table.InsertItemDict(ctable, info)
+            table.InsertItemDict(ctable, info)
             print timeFormat.getTimeStamp(info['ctime']),info['title']
         except:
             logging.error('encoding not supported:%s'%info['url'])  
