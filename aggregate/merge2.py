@@ -16,8 +16,8 @@ import time
 import logging
 from config import merge2_rmd_file
 oldtime=time.time()
-depos=Depository(0.8,merge2_rmd_file)
-# depos=Depository(0.8)
+# depos=Depository(0.8,merge2_rmd_file)
+depos=Depository(0.8)
 docs=getdoc2.get_records_dayago(20)
 for doc,title in docs.iteritems():
     depos.add_doc(doc, title)     # just add doc into the repository

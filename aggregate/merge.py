@@ -18,8 +18,8 @@ from common import toolpit
 from config import merge1_rmd_file
 
 oldtime=time.time()
-depos=Depository(0.8,merge1_rmd_file) # for debug
-# depos=Depository(0.8)
+# depos=Depository(0.8,merge1_rmd_file) # for debug
+depos=Depository(0.8)
 docs=getdoc.get_records_dayago(dbconfig.mergetable,20)
 for doc,summary in docs.iteritems():
     depos.add_doc(doc, summary)     # just add doc into the repository

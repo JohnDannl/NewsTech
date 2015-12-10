@@ -85,9 +85,9 @@ def call_crawl():
     for web in webs:
         webdic[web].main()
 if __name__=='__main__':    
-    call_crawl()
-#     while True:
-#         call_sync()
+#     call_crawl()
+    while True:
+        call_sync()
 #         call_async()
 #         aggregate.main()
 #         print 'Main thread begins to sleep at time %s' %(timeformat.getTimeStamp(),)
