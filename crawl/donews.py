@@ -46,9 +46,8 @@ def getHtmlInfo():
             nInfo['thumb']=img.get('src') if img else ''
             nInfo['keywords']=''
             timeStr= item.find('span',{'class':'time'}).getText()
-            dateStr=r1('(\d{4}/\d{4})',nInfo['thumb']) 
-            dateStr+=r1('(\d{2}:\d{2})',timeStr)                 
-            nInfo['ctime']=long(time.mktime(time.strptime(dateStr,'%Y/%m%d%H:%M')))              
+            timeStr=time.strftime('%Y年').decode('utf-8')+timeStr
+            nInfo['ctime']=long(time.mktime(time.strptime(timeStr,u'%Y年%m月%d日 %H:%M')))
             nInfo['source']=ctable
             nInfo['author']=item.find('span',{'class':'place'}).getText()
             nInfo['description']=''     
