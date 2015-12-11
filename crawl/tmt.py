@@ -36,7 +36,8 @@ def getRssInfo():
 #         print timeFormat.getTimeStamp(info['ctime']),info['title']
 #         print info['author']
         info['source']=ctable
-        tags=entry.tags
+        if 'tags' in entry:
+            tags=entry.tags
         info['keywords']=','.join(tag.term for tag in tags) if tags else ''        
         info['description']=entry.content[0].value
         soup = BeautifulSoup(info['description'], "html.parser",from_encoding='utf-8')        
@@ -54,7 +55,7 @@ def main():
     infoList=getRssInfo()
     for info in infoList:
         try:
-            table.InsertItemDict(ctable, info)
+#             table.InsertItemDict(ctable, info)
             print timeFormat.getTimeStamp(info['ctime']),info['title']     
         except:
             logging.error('encoding not supported:%s'%info['url'])
