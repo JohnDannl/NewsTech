@@ -42,14 +42,15 @@ def getHtmlInfo(url):
             title=head.getText()
             nInfo['title']=r1(u'(?:^[【,「].*?[】,」])?(.*)',title) 
             nInfo['newsid']=getMd5(nInfo['url'])  
-            nInfo['summary']=item.find('p',{'class':'intro'}).getText()
+            desc=item.find('p',{'class':'intro'})
+            nInfo['summary']=desc.getText()
             nInfo['thumb']=item.find('img').get('src')  
             nInfo['keywords']=','.join(i.getText() for i in item.find('p',{'class':'clearfix tag'}).find_all('a'))
             timeStr= time.strftime('%Y')+'-'+item.find('span',{'class':'right time'}).getText()
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d')))  
             nInfo['source']=ctable
             nInfo['author']=''  
-            nInfo['description']=''      
+            nInfo['description']=desc
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['keywords'],nInfo['thumb']
 #             print nInfo['summary']  

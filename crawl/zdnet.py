@@ -40,7 +40,8 @@ def getHtmlInfo():
             nInfo['url']=head.find('b').find('a').get('href')
             nInfo['newsid']=getMd5(nInfo['url'])
             nInfo['title']=head.find('b').getText()
-            nInfo['summary']=head.find('p').getText()
+            desc=head.find('p')
+            nInfo['summary']=desc.getText()
             metas=head.find('p',{'class':'meta'})
             nInfo['keywords']=','.join(a.getText() for a in metas.find_all('a')) if metas else ''            
             nInfo['thumb']=item.find('div',{'class':'qu_ims'}).find('img').get('src')
@@ -48,7 +49,7 @@ def getHtmlInfo():
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,u'%Y-%m-%d %H:%M:%S'))) 
             nInfo['source']=ctable
             nInfo['author']=''  
-            nInfo['description']=''        
+            nInfo['description']=desc 
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['keywords'],nInfo['thumb']
 #             print nInfo['summary']  

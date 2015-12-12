@@ -36,8 +36,9 @@ def getHtmlInfo():
             head=item.find('h2',{'class':'color-link'})
             nInfo['url']=head.find('a').get('href')
             nInfo['title']=head.getText() # getText() is a safer way than .string to get text
-            nInfo['newsid']=getMd5(nInfo['url'])         
-            nInfo['summary']=item.find('p',{'class':'color-dig w390'}).find('a').getText()
+            nInfo['newsid']=getMd5(nInfo['url'])      
+            desc=item.find('p',{'class':'color-dig w390'})   
+            nInfo['summary']=desc.find('a').getText()
             img=item.find('a',{'class':'left'}).find('img')
             nInfo['thumb']=img.get('src') if img.get('src') else img.get('data-src')
             nInfo['keywords']=','.join(i.getText() for i in item.find('span',{'class':'join-keys left clearfix'}).find_all('a'))
@@ -45,7 +46,7 @@ def getHtmlInfo():
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d %H:%M:%S')))
             nInfo['source']=ctable
             nInfo['author']=''
-            nInfo['description']=''  
+            nInfo['description']=desc
             newsList.append(nInfo)
     return newsList
 

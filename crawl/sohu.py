@@ -43,13 +43,14 @@ def getHtmlInfo(url):
             item_info=item_txt.find('div',{'class':"news-info"}) 
             timeStr=item_info.find('span',{'class':"time"}).getText()  
             nInfo['ctime']=long(time.mktime(time.strptime(timeStr, u'%Y年%m月%d日%H:%M')))
-            nInfo['summary']=item_txt.find('p').getText()
+            desc=item_txt.find('p')
+            nInfo['summary']=desc.getText()
             item_pic=item.find('div',{'class':"item-pic"})
             nInfo['thumb']=item_pic.find('img').get('src') if item_pic else ''
             nInfo['keywords']=''
             nInfo['source']=ctable    
             nInfo['author']=item_info.find('span',{'class':"edit-info"}).getText().strip()
-            nInfo['description']=''                 
+            nInfo['description']=desc                
             newsDict[nInfo['newsid']]=nInfo
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']

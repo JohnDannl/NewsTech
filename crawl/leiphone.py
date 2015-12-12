@@ -41,8 +41,9 @@ def getHtmlInfo():
             nInfo['url']=head.get('href')
             title=head.find('div',{'class':'tit'}).getText()
             nInfo['title']=r1(u'(?:^[【,「].*?[】,」])?(.*)',title) 
-            nInfo['newsid']=getMd5(nInfo['url'])                      
-            nInfo['summary']=word.find('div',{'class':'des'}).getText().strip()             
+            nInfo['newsid']=getMd5(nInfo['url'])             
+            desc=word.find('div',{'class':'des'})         
+            nInfo['summary']=desc.getText().strip()             
             img=item.find('img',{'class':'lazy'}).get('data-original')
             if not img:
                 img=item.find('img',{'class':'lazy'}).get('src')
@@ -54,7 +55,7 @@ def getHtmlInfo():
             author=word.find('div',{'class':'aut'})                        
             nInfo['author']=author.getText().strip() if author else ''
             nInfo['source']=ctable
-            nInfo['description']=''
+            nInfo['description']=desc
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['author'],nInfo['thumb']

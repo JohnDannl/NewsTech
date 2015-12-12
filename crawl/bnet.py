@@ -37,8 +37,9 @@ def getHtmlInfo():
             nInfo['url']=head.get('href')
             title=head.getText()
             nInfo['title']=r1(u'(?:^[【,「].*?[】,」])?(.*)',title)
-            nInfo['newsid']=getMd5(nInfo['url'])              
-            nInfo['summary']=item.find('p',{'class':'summary'}).getText().strip()
+            nInfo['newsid']=getMd5(nInfo['url'])        
+            desc=item.find('p',{'class':'summary'})      
+            nInfo['summary']=desc.getText().strip()
             img=item.find('a',{'class':'thumb'}).find('img')
             nInfo['thumb']=img.get('src')  
             nInfo['keywords']=','.join(i.getText() for i in item.find_all('span')[1].find_all('a'))
@@ -46,7 +47,7 @@ def getHtmlInfo():
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y/%m%d')))                             
             nInfo['source']=ctable
             nInfo['author']=''   
-            nInfo['description']=''   
+            nInfo['description']=desc 
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['keywords'],nInfo['thumb']
 #             print nInfo['summary']        

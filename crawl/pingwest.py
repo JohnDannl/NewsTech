@@ -34,7 +34,7 @@ def getRssInfo():
         info['ctime']=(long)(time.mktime(entry.published_parsed))
         info['author']=entry.author
 #         print timeFormat.getTimeStamp(info['ctime']),info['title']
-        print info['author']
+#         print info['author']
         info['source']=ctable
         tags=entry.tags
         info['keywords']=','.join(tag.term for tag in tags) if tags else ''        

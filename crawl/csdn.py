@@ -37,8 +37,9 @@ def getHtmlInfo(url):
             nInfo['url']=head.get('href')
             title=head.getText()
             nInfo['title']=r1(u'(?:^[【,「].*?[】,」])?(.*)',title)
-            nInfo['newsid']=getMd5(nInfo['url'])              
-            nInfo['summary']=item.find('dd').getText()
+            nInfo['newsid']=getMd5(nInfo['url'])    
+            desc=item.find('dd')         
+            nInfo['summary']=desc.getText()
             img=item.find('img')
             nInfo['thumb']=img.get('src') if img else ''                              
             nInfo['keywords']=','.join(tag.getText() for tag in item.find('div',{'class':'tag'}).find_all('a'))
@@ -52,7 +53,7 @@ def getHtmlInfo(url):
             nInfo['ctime']= long(ctime)                    
             nInfo['source']=ctable
             nInfo['author']=''          
-            nInfo['description']=''
+            nInfo['description']=desc
             newsList.append(nInfo)
     return newsList
 urls=['http://news.csdn.net/',

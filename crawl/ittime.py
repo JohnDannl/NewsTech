@@ -37,8 +37,9 @@ def getHtmlInfo():
             head=item.find('h3').find('a')
             nInfo['url']=domain+head.get('href')
             nInfo['title']=head.getText()
-            nInfo['newsid']=getMd5(nInfo['url'])                
-            nInfo['summary']=item.find('p').getText()  
+            nInfo['newsid']=getMd5(nInfo['url'])   
+            desc=item.find('p')             
+            nInfo['summary']=desc.getText()  
             img=item.find('a',{'class':'img_212'}).find('img')
             nInfo['thumb']=domain+img.get('src')
             nInfo['keywords']=','.join([i.getText() if i.getText() else '' for i in item.find('span',{'style':'float:left;'}).find_all('a')])
@@ -47,7 +48,7 @@ def getHtmlInfo():
             nInfo['source']=ctable
             author=item.find('div',{'class':'box-other3'}).find('a')
             nInfo['author']=author.getText() if author else ''
-            nInfo['description']=''  
+            nInfo['description']=desc
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['author'],nInfo['thumb']

@@ -40,8 +40,9 @@ def getHtmlInfo():
             nInfo['url']=head.get('href')
             title=head.getText()# the result returned by getText() is unicode
             nInfo['title']=r1(u'(?:^[【,「].*?[】,」])?(.*)',title) 
-            nInfo['newsid']=getMd5(nInfo['url'])                       
-            nInfo['summary']=item.find('p',{'class':'info'}).getText().strip()
+            nInfo['newsid']=getMd5(nInfo['url'])     
+            desc=item.find('p',{'class':'info'})                  
+            nInfo['summary']=desc.getText().strip()
             img=item.find('img')
             nInfo['thumb']=img.get('src') if img else ''
             nInfo['keywords']=''
@@ -50,7 +51,7 @@ def getHtmlInfo():
             nInfo['ctime']=long(time.mktime(time.strptime(timeStr,u'%Y年%m月%d日 %H:%M')))
             nInfo['source']=ctable
             nInfo['author']=item.find('span',{'class':'place'}).getText()
-            nInfo['description']=''     
+            nInfo['description']=desc
             #print nInfo['newsid'],nInfo['url']
             #print nInfo['author'],nInfo['thumb']
             #print nInfo['summary']
