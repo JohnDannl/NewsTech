@@ -51,7 +51,7 @@ def getHtmlInfo():
             nInfo['ctime']=long(time.mktime(time.strptime(timeStr,u'%Y年%m月%d日 %H:%M')))
             nInfo['source']=ctable
             nInfo['author']=item.find('span',{'class':'place'}).getText()
-            nInfo['description']=desc
+            nInfo['description']=str(desc)
             #print nInfo['newsid'],nInfo['url']
             #print nInfo['author'],nInfo['thumb']
             #print nInfo['summary']

@@ -52,7 +52,7 @@ def getHtmlInfo():
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,u'%Y-%m-%d %H:%M:%S'))) 
             nInfo['source']=ctable
             nInfo['author']=''  
-            nInfo['description']=desc   
+            nInfo['description']=str(desc)   
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['keywords'],nInfo['thumb']
 #             print nInfo['summary']

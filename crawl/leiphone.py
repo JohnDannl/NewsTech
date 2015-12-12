@@ -55,7 +55,7 @@ def getHtmlInfo():
             author=word.find('div',{'class':'aut'})                        
             nInfo['author']=author.getText().strip() if author else ''
             nInfo['source']=ctable
-            nInfo['description']=desc
+            nInfo['description']=str(desc)
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['author'],nInfo['thumb']

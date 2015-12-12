@@ -50,7 +50,7 @@ def getHtmlInfo(url):
             nInfo['keywords']=''
             nInfo['source']=ctable    
             nInfo['author']=item_info.find('span',{'class':"edit-info"}).getText().strip()
-            nInfo['description']=desc                
+            nInfo['description']=str(desc)                
             newsDict[nInfo['newsid']]=nInfo
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']

@@ -53,9 +53,52 @@ def getRssInfo():
         infoList.append(info)
     return infoList
 
+def getHtmlInfo(page=1):
+    url=r'http://tech.qq.com/c/ks2013timeline_%s.htm'%(page,) 
+    print url 
+    content=getHtml(url)
+#     print content
+    newsList=[]
+    if content:
+        soup = BeautifulSoup(content, 'html.parser',from_encoding='utf-8')
+        itemList=soup.find_all('div',{'class':'Q-tpList'})
+        for item in itemList:
+            nInfo={}
+            head=item.find('h3',{'class':'f18 l26'})
+            if not head:
+                continue 
+            head=head.find('a')
+            nInfo['url']=head.get('href')
+            nInfo['title']=head.getText()
+            nInfo['newsid']=getMd5(nInfo['url']) 
+            desc=item.find('p',{'class':'l23'})
+            nInfo['summary']=desc.getText()
+            img=item.find('a',{'class':'pic'})
+            if not img:
+                continue
+            nInfo['thumb']=img.find('img').get('src') 
+            tags=item.find('span',{'class':'techTag'}).find_all('a')                          
+            nInfo['keywords']=','.join(i.getText() for i in tags)
+            timeStr= item.find('span',{'class':'aTime'}).getText()
+            if timeStr:
+                ctime=long(time.mktime(time.strptime(timeStr,'%Y-%m-%d %H:%M:%S'))) 
+            else:     
+                ctime=long(time.time())                                      
+            nInfo['ctime']=ctime          
+            nInfo['source']=ctable
+            nInfo['author']=''  
+            nInfo['description']=str(desc)  
+#             print nInfo['newsid'],nInfo['url']
+#             print nInfo['keywords'],nInfo['thumb']
+#             print nInfo['summary']  
+#             print desc    
+            newsList.append(nInfo)
+    return newsList
+
 @cost_log
 def main():
-    infoList=getRssInfo()
+    infoList=getHtmlInfo(1)
+#     infoList=getRssInfo()
     for info in infoList:
         try:
             table.InsertItemDict(ctable, info)

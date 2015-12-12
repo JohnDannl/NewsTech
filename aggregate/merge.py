@@ -41,7 +41,7 @@ def __addDoctoTable(doc):
 def mergeWeb(tablename):
     docs=getdoc.get_records_newadded(tablename)
     if not docs:
-        msg='%s has no new news'%(tablename,)        
+        msg='%s has added no news'%(tablename,)        
         print msg
         logging.info(msg)
         return 

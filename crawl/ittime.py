@@ -48,7 +48,7 @@ def getHtmlInfo():
             nInfo['source']=ctable
             author=item.find('div',{'class':'box-other3'}).find('a')
             nInfo['author']=author.getText() if author else ''
-            nInfo['description']=desc
+            nInfo['description']=str(desc)
 #             print nInfo['ctime'],nInfo['title']
 #             print nInfo['newsid'],nInfo['url']
 #             print nInfo['author'],nInfo['thumb']

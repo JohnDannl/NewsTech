@@ -37,7 +37,7 @@ def get_records_newadded(web):
     m_maxid=tablemerge.getMaxWebId(dbconfig.mergetable, web)    
     if not m_maxid:
         m_maxid=-1
-    w_maxid=table.getMaxId(web)    
+    w_maxid=table.getMaxId(web) 
     docs={}
     if w_maxid>m_maxid:
         rows=table.getBriefRecordsBiggerId(web, m_maxid)

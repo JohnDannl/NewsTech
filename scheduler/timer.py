@@ -65,7 +65,7 @@ def call_sync():
         merge.mergeWeb(web)
         merge2.mergeWeb()
         print 'Main thread begins to sleep at time %s' %(timeFormat.getTimeStamp(),)
-        time.sleep(120)
+        time.sleep(0)
     
 def call_async():
     # Just like single-processing,why?

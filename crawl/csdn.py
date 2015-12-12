@@ -53,7 +53,7 @@ def getHtmlInfo(url):
             nInfo['ctime']= long(ctime)                    
             nInfo['source']=ctable
             nInfo['author']=''          
-            nInfo['description']=desc
+            nInfo['description']=str(desc)
             newsList.append(nInfo)
     return newsList
 urls=['http://news.csdn.net/',

@@ -46,7 +46,7 @@ def getHtmlInfo():
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d %H:%M:%S')))
             nInfo['source']=ctable
             nInfo['author']=''
-            nInfo['description']=desc
+            nInfo['description']=str(desc)
             newsList.append(nInfo)
     return newsList
 
