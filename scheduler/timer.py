@@ -14,7 +14,7 @@ sys.path.append(r'../crawl_mpd')
 #from apscheduler.scheduler import Scheduler
 from crawl import bnet,ciweek,cnet,csdn,donews,geekpark,hiapk,huxiu,ifanr,ittime,\
     leiphone,pingwest,pintu360,qq,sina,sohu,techcrunch,technews,techweb,tmt,\
-    w163,w36kr,zdnet,zhidx,zol
+    w163,w36kr,zdnet,zhidx,zol,feng
 from common import timeFormat
 from aggregate import merge,merge2
 import multiprocessing
@@ -48,10 +48,11 @@ webdic={'sina':sina,'sohu':sohu,'w163':w163,'huxiu':huxiu,'ittime':ittime,
        'w36kr':w36kr,'leiphone':leiphone,'ifanr':ifanr,'zol':zol,'tmt':tmt,
        'csdn':csdn,'ciweek':ciweek,'geekpark':geekpark,'donews':donews,'zhidx':zhidx,
        'techweb':techweb,'bnet':bnet,'cnet':cnet,'techcrunch':techcrunch,'technews':technews,
-       'zdnet':zdnet,'pingwest':pingwest,'pintu360':pintu360,'hiapk':hiapk,'qq':qq}
+       'zdnet':zdnet,'pingwest':pingwest,'pintu360':pintu360,'hiapk':hiapk,'qq':qq,
+       'feng':feng}
 webs=['bnet','ciweek','cnet','csdn','donews','geekpark','hiapk','huxiu','ifanr','ittime',\
       'leiphone','pingwest','pintu360','qq','sina','sohu','techcrunch','technews','techweb','tmt',\
-      'w163','w36kr','zdnet','zhidx','zol']
+      'w163','w36kr','zdnet','zhidx','zol','feng']
 
 count=0
 def call_sync():
@@ -65,7 +66,7 @@ def call_sync():
         merge.mergeWeb(web)
         merge2.mergeWeb()
         print 'Main thread begins to sleep at time %s' %(timeFormat.getTimeStamp(),)
-        time.sleep(0)
+        time.sleep(120)
     
 def call_async():
     # Just like single-processing,why?

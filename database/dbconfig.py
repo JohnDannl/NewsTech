@@ -21,7 +21,8 @@ tableName={'sina':'sina','sohu':'sohu','w163':'w163','huxiu':'huxiu','ittime':'i
            'w36kr':'w36kr','leiphone':'leiphone','ifanr':'ifanr','zol':'zol','tmt':'tmt',
            'csdn':'csdn','ciweek':'ciweek','geekpark':'geekpark','donews':'donews','zhidx':'zhidx',
            'techweb':'techweb','bnet':'bnet','cnet':'cnet','techcrunch':'techcrunch','technews':'technews',
-           'zdnet':'zdnet','pingwest':'pingwest','pintu360':'pintu360','hiapk':'hiapk','qq':'qq'}
+           'zdnet':'zdnet','pingwest':'pingwest','pintu360':'pintu360','hiapk':'hiapk','qq':'qq',
+           'feng':'feng',}
 
 mergetable='merge'
 mergetable2='merge2'

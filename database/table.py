@@ -158,7 +158,7 @@ def ReIndex(tablename):
         print 'Failure:reindex %s'%tablename
     
 if __name__ == "__main__":
-#     CreateNewsTable(dbconfig.tableName['huxiu'])
+#     CreateNewsTable(dbconfig.tableName['feng'])
     for tablename in dbconfig.tableName.itervalues():
         CreateNewsTable(tablename)
     
