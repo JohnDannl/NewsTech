@@ -60,7 +60,7 @@ def getHtmlInfo(page=1):
 #     print content
     newsList=[]
     if content:
-        soup = BeautifulSoup(content, 'html.parser',from_encoding='utf-8')
+        soup = BeautifulSoup(content, 'html.parser',from_encoding='gbk')
         itemList=soup.find_all('div',{'class':'Q-tpList'})
         for item in itemList:
             nInfo={}
