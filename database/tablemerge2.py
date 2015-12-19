@@ -147,17 +147,21 @@ def updateMtype(tablename,mtype,newsid):
     query = "UPDATE " + tablename + """ SET mtype = %s WHERE  newsid = %s"""
     dbconn.Update(query, (mtype,newsid))
 
-# def getRelated(tablename):
-#     query = 'select related from '+tablename+""" WHERE related !='' """
-#     rows=dbconn.Select(query,())    
-#     print rows
-#     print rows[0][0]
+def getRelated(tablename):
+    query = 'select newsid,related from '+tablename+""" WHERE related !='' """
+    rows=dbconn.Select(query,())    
+    print len(rows)
+    print rows[0][0],rows[0][1]
+    print '787f22bcb057fcedb57c0a0b393b8b6c' in rows[0][1].split(',')
     
 def addRelated(tablename,newsid,addnewsid):
     query = 'select related from '+tablename+""" WHERE newsid = %s"""
     rows=dbconn.Select(query,(newsid,))
     if rows !=-1 and len(rows)>0:        
         related=rows[0][0]
+        if addnewsid in related.split(','):
+            print addnewsid,'already contained in the related'
+            return
         related+=','+addnewsid
         query = "UPDATE " + tablename + """ SET related = %s WHERE newsid = %s"""
         dbconn.Update(query, (related,newsid))
@@ -192,6 +196,7 @@ def CreateTable(tablename):
 if __name__ == "__main__":    
     CreateTable(dbconfig.mergetable2) 
 #     getRelated(dbconfig.mergetable2)
+#     addRelated(dbconfig.mergetable2, '172003361a86720b3c6e1c333f3ac416', '787f22bcb057fcedb57c0a0b393b8b6c')
 #     print getMaxId(dbconfig.mergetable,'sohu')
 #     rows=getBottomETBVRecords(dbconfig.tableName[2],'2014-09-04 10:09:02','1310457')
 #     rows=getBottomBTRecords(dbconfig.tableName[2],'2014-09-04 10:09:02',10)
