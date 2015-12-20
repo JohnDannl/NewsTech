@@ -36,7 +36,7 @@ def getRssInfo():
         info['ctime']=(long)(time.mktime(entry.published_parsed))
         info['author']=entry.author
         info['source']=ctable
-        tags=entry.tags
+        tags=entry.tags if 'tags' in entry else None   
         info['keywords']=','.join(tag.term for tag in tags) if tags else ''
         soup = BeautifulSoup(info['description'], "html.parser",from_encoding='utf-8')        
         img=soup.find('img')

@@ -36,7 +36,7 @@ def getRssInfo():
 #         print timeFormat.getTimeStamp(info['ctime']),info['title']
 #         print info['author']
         info['source']=ctable
-        tags=entry.tags
+        tags=entry.tags if 'tags' in entry else None   
         info['keywords']=','.join(tag.term for tag in tags) if tags else ''        
         info['description']=entry.content[0].value
         soup = BeautifulSoup(info['description'], "html.parser",from_encoding='utf-8')        
