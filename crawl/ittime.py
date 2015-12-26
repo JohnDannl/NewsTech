@@ -43,7 +43,7 @@ def getHtmlInfo():
             img=item.find('a',{'class':'img_212'}).find('img')
             nInfo['thumb']=domain+img.get('src')
             nInfo['keywords']=','.join([i.getText() if i.getText() else '' for i in item.find('span',{'style':'float:left;'}).find_all('a')])
-            timeStr=r1('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',item.find('div',{'class':'box-other3'}).get_text())
+            timeStr=r1('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',item.find('div',{'class':'box-other1'}).get_text())
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d %H:%M:%S')))         
             nInfo['source']=ctable
             author=item.find('div',{'class':'box-other3'}).find('a')
