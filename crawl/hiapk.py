@@ -47,7 +47,11 @@ def getHtmlInfo(url):
             nInfo['thumb']=item.find('img').get('src')  
             nInfo['keywords']=','.join(i.getText() for i in item.find('p',{'class':'clearfix tag'}).find_all('a'))
             timeStr= time.strftime('%Y')+'-'+item.find('span',{'class':'right time'}).getText()
-            nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d')))  
+            timeLong=long(time.mktime(time.strptime(timeStr,'%Y-%m-%d')))  
+            threshold=time.time()+1000  
+            if timeLong>threshold:      # if today is in the new year
+                timeLong=timeLong-3600*24*365
+            nInfo['ctime']= timeLong
             nInfo['source']=ctable
             nInfo['author']=''  
             nInfo['description']=str(desc)
@@ -65,7 +69,7 @@ def main():
         infoList+=getHtmlInfo(url)   
     for info in infoList:
         try:
-            table.InsertItemDict(ctable, info)
+#             table.InsertItemDict(ctable, info)
             print timeFormat.getTimeStamp(info['ctime']),info['title']
         except:
             logging.error('encoding not supported:%s'%info['url'])
