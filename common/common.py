@@ -21,6 +21,7 @@ def r1(pattern, text):
     m = re.search(pattern, text)
     if m:
         return m.group(1)
+    
 def cost_log(func):
     @functools.wraps(func)
     def wrapper(*args,**kw):
