@@ -39,8 +39,12 @@ def getHtmlInfo():
             nInfo['newsid']=getMd5(nInfo['url'])      
             desc=head.find('p').string   
             nInfo['summary']=desc
-            img=item.find('div',{'class':'img_box'}).find('img')
-            nInfo['thumb']=img.get('src') if img.get('src') else img.get('data-src')
+            img=item.find('div',{'class':'img_box'})
+            if img:
+                img=img.find('img')
+                nInfo['thumb']=img.get('src') if img.get('src') else img.get('data-src')
+            else:
+                continue
             nInfo['keywords']=head.find('span').getText()
             timeStr=head.find('em').get('time')
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%m/%d/%Y %H:%M:%S')))
