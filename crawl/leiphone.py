@@ -50,6 +50,8 @@ def getHtmlInfo():
             nInfo['thumb']=img               
             nInfo['keywords']=''         
             time_block= item.find('div',{'class':'time'})
+            if not time_block:
+                continue
             timeStr=' '.join(i.getText().replace(' / ','-') for i in time_block.find_all('span'))
             nInfo['ctime']= long(time.mktime(time.strptime(timeStr,'%Y-%m-%d %H:%M')))   
             author=word.find('div',{'class':'aut'})                        
