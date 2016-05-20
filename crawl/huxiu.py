@@ -12,7 +12,7 @@ import feedparser
 from bs4 import BeautifulSoup
 import time,logging
 from database import dbconfig,table
-from common.common import r1, cost_log
+from common.common import r1, cost_log,getHtml
 from common import timeFormat,logger
 from common.toolpit import getMd5
 
@@ -53,9 +53,57 @@ def getRssInfo():
         infoList.append(info)
     return infoList
 
+def getHtmlInfo():
+    url=r'http://www.huxiu.com'   
+    wap_url='http://m.huxiu.com'
+    content=getHtml(url)
+    #print content
+    newsList=[]
+    if content:
+        soup = BeautifulSoup(content, 'html.parser',from_encoding='utf-8')
+        itemList=soup.find_all('div',{'class':'mod-b mod-art '})
+        itemList+=soup.find_all('div',{'class':'mod-b mod-art mod-b-push'})
+        for item in itemList:
+            nInfo={}
+            head=item.find('',{'class':'mob-ctt'})
+            if not head:
+                continue
+            title=head.find('h3')
+            if not title:
+                continue
+            title=title.find('a')
+            nInfo['url']=url+title.get('href')         
+            nInfo['title']=title.getText()
+            nInfo['newsid']=getMd5(nInfo['url'])                   
+            nInfo['summary']=item.find('div',{'class':'mob-sub'}).getText() 
+            nInfo['description']=nInfo['summary']      
+            nInfo['thumb']= item.find('img',{'class':'lazy'}).get('data-original')            
+            nInfo['keywords']= ''
+            timeStr=head.find('span',{'class':'time'}).getText()  
+            timeSec=time.time()   
+            min_num=r1(u'(\d{1,2})分钟前',timeStr)   
+            if min_num:
+                timeSec-=60*long(min_num)
+            else:
+                hour_num=r1(u'(\d{1,2})小时前',timeStr) 
+                if hour_num:
+                    timeSec-=3600*long(hour_num)
+                else:
+                    day_num=r1(u'(\d{1,2})天前',timeStr) 
+                    timeSec=timeSec-long(day_num)*24*3600 if day_num else timeSec             
+            nInfo['ctime']=timeSec
+            author_div=item.find('div',{'class':'mob-author'})
+            nInfo['author']=''
+            if author_div:
+                author_span=author_div.find('span',{'class':'author-name '})
+                nInfo['author']=author_span.getText() if author_span else ''
+            nInfo['source']=ctable
+            newsList.append(nInfo)
+    return newsList
+
 @cost_log
 def main():
-    infoList=getRssInfo()
+    infoList=getHtmlInfo()
     for info in infoList:
         try:
             table.InsertItemDict(ctable, info)
